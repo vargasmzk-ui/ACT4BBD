@@ -1,15 +1,12 @@
 package dao;
 
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-
 import modelo.Ciudadano;
 import modelo.Requisito;
 import modelo.SolicitudLicencia;
-
 
 public class CiudadanoDAO {
    
@@ -77,6 +74,53 @@ public class CiudadanoDAO {
             }
         } catch (SQLException e) {
             System.out.println("🔴 Error al guardar en la Base de Datos: " + e.getMessage());
+        }
+    }
+
+
+    // Método para consultar el historial de Ciudadanos
+    public void consultarHistorial() {
+        String sql = "SELECT c.id_ciudadano, c.nombre, c.curp, c.telefono, " +
+                     "s.folio, s.tipo_licencia, s.esta_aprobada, " +
+                     "r.nombre_documento, r.fue_entregado " +
+                     "FROM Ciudadano c" +
+                     "INNER JOIN SolicitudLicencia s ON c.id_ciudadano = s.id_ciudadano " +
+                     "INNER JOIN Requisito r ON s.folio = r.folio_solicitud";
+
+
+        try {
+            Connection conexion = ConexionBD.conectar();
+
+
+            if (conexion != null) {
+                java.sql.Statement stmt = conexion.createStatement();
+                java.sql.ResultSet rs = stmt.executeQuery(sql);
+
+
+                System.out.println("\n");
+                System.out.println("=".repeat(50));
+                System.out.println("    HISTORIAL DE TRÁMITES");
+                System.out.println("=".repeat(50));
+
+                int contador = 0;
+
+                while (rs.next()) {
+                    contador++;
+                    System.out.println("\nRegistro #" + rs.getInt("id_ciudadano") + ":");
+                    System.out.println("=".repeat(50));
+                    System.out.println("    Estado del Trámite (Folio: " + rs.getInt("folio") + ")");
+                    System.out.println("=".repeat(50));
+                    System.out.println("Ciudadano: " + rs.getString("nombre"));
+                    System.out.println("CURP: " + rs.getString("curp"));
+                    System.out.println("Tel: " + rs.getString("telefono"));
+                    System.out.println("Tipo de licencia: " + rs.getString("tipo_licencia"));
+                    System.out.println("Requisito (" + rs.getString("nombre_documento") + ") entregado: " + (rs.getBoolean("fue_entregado") ? "Sí" : "No"));
+                    System.out.println("Aprobado: " + (rs.getBoolean("esta_aprobada") ? "Sí" : "No"));
+                }
+               
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
         }
     }
 }
