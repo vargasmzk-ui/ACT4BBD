@@ -37,4 +37,11 @@ public class SolicitudLicencia {
         System.out.println("Tipo de licencia: " + tipoLicencia);
         System.out.println("Aprobado: " + (aprobada ? "Sí" : "No"));
     }
+
+    //metodo getters
+    public  String getTipoLicencia() { return tipoLicencia; }
+
+    //codigo extra - bd
+    public  boolean getEstaAprobada() { return aprobada; }
+
 }

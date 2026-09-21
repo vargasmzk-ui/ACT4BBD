@@ -20,4 +20,7 @@ public class Requisito {
 
     // Método Getter
     public boolean getFueEntregado() { return fueEntregado; }
+    
+    //CÓDIGO EXTRA - BD
+    public String getNombreDocumento() {return nombreDocumento; }
 }
